@@ -1,10 +1,21 @@
 # R-Package
-Creating an R package: comparing outputs from linear regression models
-
-## Comparing models
-
-Compare models in a list according to the `coefficients` produced from the `summary` printed out from the `lm()` function as well as plots printed out from `plot()` of the `lm()` outputs
-
-Input parameters for function should be a list of predefined linear regression models created from `lm()`.
-The output will be a list of all coefficient values for each model in `mods` and 4 graphs of residuals.
-Requires purrr, map packages.
+Creating an R package: Package: ModelList
+Title: Contains all functions and class defintions for creating ModelList object
+Version: 0.0.0.9000
+Authors@R: 
+    person("Jessica", "Pak", , "jhpak@berkeley.edu", role = c("aut", "cre"))
+Description: ModelList class is created to contain multiple regression models for easy manipulation. A summary method provides summaries of all input models. Predict method creates a matrix of predicted values from all input models.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Imports: 
+    broom,
+    dplyr,
+    gapminder,
+    magrittr,
+    purrr,
+    tibble
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
