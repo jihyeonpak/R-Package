@@ -1,5 +1,5 @@
 # R-Package
-Creating an R package: Package: ModelList  
+Creating an R package and new class in R: ModelList  
 
 Title: Contains all functions and class defintions for creating ModelList object  
 
