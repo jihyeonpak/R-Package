@@ -1,0 +1,49 @@
+---
+title: "Model List Analysis Report and Example"
+author: "Jessica Pak"
+date: "2022-10-14"
+output: pdf_document
+---
+
+```{r loading library, include = FALSE}
+library(dplyr)
+library(sloop)
+library(broom)
+library(purrr)
+library(rpart)
+library(glmnetUtils)
+library(gapminder)
+```
+
+```{r using ModelList package}
+# creating package
+# usethis::create_package("ModelList")
+
+# loading library
+library("ModelList")
+
+# user input
+dataOld <- gapminder::gapminder %>% filter(year <= 2000)
+mod1 <- lm(lifeExp ~ year + pop + gdpPercap, dataOld)
+mod2 <- rpart::rpart(lifeExp ~ year + pop + gdpPercap, dataOld)
+mod3 <- glmnetUtils::cv.glmnet(lifeExp ~ year + pop + gdpPercap, dataOld)
+
+# analysis example
+mList <- CreateModelList(mod1, mod2, mod3)
+mList <- newModelList(mList)
+
+summary <- summary(mList) # compact summaries for the models in mList
+View(summary)
+#summary[[2]][[1]]
+
+dataNew <- gapminder::gapminder %>% filter(year > 2000)
+
+# get all the predicted values. allPred should be a matrix of 3 columns, each containing the predicted values for one model evaluated on dataNew
+allPred <- predict(mList, newdata=dataNew)
+
+# a vector of length 3 containing the mean squared errors
+MSE <- colMeans((dataNew$lifeExp - allPred)^2)
+MSE
+```
+
+The code chunk above shows utilization of the package `{ModelList}` as well as functions specified in the package, including the generator function `CreateModelList()` as well as the `newModelList()` function that creates `mList` object into `ModelList` class. This `ModelList` object is used to create the `summary` tibble using the `summary.ModelList()` method, which can be viewed in the environments pane. The resulting tibble shows that there are 3 observations for each model specified in the container `ModelList` object and two columns, where the first column contains the models and the second column contains the summary of that model as a nested value. If `ModelList` contains a regression model that can be summarized using `broom::tidy()`, the nested summary is the output of `tidy()`. If the model is created from `rpart::rpart()`, the `tidy()` is incompatible, therefore, another nested summary with important variables determined by the regression tree is presented. The `predict.ModelList()` method creates a matrix of all predicted values from the models. The number of rows in the matrix corresponds to the number of observations in the dataframe that the model is evaluating predictions for, and the number of columns in the matrix correspond to the number of models in `ModelList` object. Lastly, the calculated MSE between the true outcome values in the dataframe "dataNew" and the predicted values evaluated by the models for the dataframe "dataNew" is shown in the output. 
