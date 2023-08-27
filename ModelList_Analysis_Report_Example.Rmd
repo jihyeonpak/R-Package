@@ -19,6 +19,8 @@ library(gapminder)
 # creating package
 # usethis::create_package("ModelList")
 
+# to install: may need to change working directory to where package directory resides:
+#devtools::install("/Users/jessicapak/Desktop/R/PH290/hw/ModelList")
 # loading library
 library("ModelList")
 
